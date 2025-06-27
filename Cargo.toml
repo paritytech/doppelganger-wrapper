@@ -12,5 +12,5 @@ name = "doppelganger-parachain"
 path = "src/doppelganger_parachain.rs"
 
 [dependencies]
-polkadot-sdk = {path = "/Users/pepo/parity/polkadot-sdk/umbrella", features = ["node", "serde", "doppelganger"] }
+polkadot-sdk = {git = "https://github.com/paritytech/polkadot-sdk.git", branch = "jv-doppelganger-node", features = ["node", "serde", "doppelganger"] }
 color-eyre = { version = "0.6.3", default-features = false }
