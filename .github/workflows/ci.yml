@@ -20,7 +20,7 @@ env:
 
 jobs:
   ci:
-    name: CI for jobs tracker
+    name: CI
     runs-on: ubuntu-latest
 
     steps:
