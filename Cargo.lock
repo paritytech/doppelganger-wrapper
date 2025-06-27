@@ -4374,12 +4374,7 @@ name = "doppelganger-wrapper"
 version = "0.1.0"
 dependencies = [
  "color-eyre",
- "hex",
- "hex-literal",
- "log",
  "polkadot-sdk 0.1.0",
- "serde_json",
- "tracing-log",
 ]
 
 [[package]]
