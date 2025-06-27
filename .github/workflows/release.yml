@@ -1,0 +1,53 @@
+name: Jobs monit release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: "-Dwarnings"
+  SKIP_WASM_BUILD: 1
+
+jobs:
+  preflight:
+    uses: ./.github/workflows/ci.yml # ensure ci is green
+
+  build_release_for_linux:
+    needs: [preflight]
+    name: build_release_for_linux
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set rust version via common env file
+        run: cat .github/env >> $GITHUB_ENV
+
+      - name: Install stable toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: "${{env.RUST_STABLE_VERSION}}"
+
+      - name: Fetch cache
+        uses: Swatinem/rust-cache@f0deed1e0edfc6a9be95417288c0e1099b1eeec3 # v2.7.7
+        with:
+          shared-key: "tracker-cache"
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+
+      - name: Build release
+        run: SKIP_WASM_BUILD=1 cargo build --release
+
+      - name: release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        id: create_release
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files: |
+            ./target/release/doppelganger
+            ./target/release/doppelganger-parachain

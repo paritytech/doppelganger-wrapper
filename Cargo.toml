@@ -1,0 +1,25 @@
+[package]
+name = "doppelganger-wrapper"
+version = "0.1.0"
+edition = "2024"
+
+[[bin]]
+name = "doppelganger"
+path = "src/doppelganger.rs"
+
+[[bin]]
+name = "doppelganger-parachain"
+path = "src/doppelganger_parachain.rs"
+
+[dependencies]
+polkadot-sdk = {path = "/Users/pepo/parity/polkadot-sdk/umbrella", features = ["node", "serde", "doppelganger"] }
+color-eyre = { version = "0.6.3", default-features = false }
+serde_json = { version = "1.0.132", default-features = false }
+log = { version = "0.4.22", default-features = false }
+tracing-log = { version = "0.2.0" }
+hex = { version = "0.4.3", default-features = false }
+hex-literal = { version = "0.4.1", default-features = false }
+
+
+
+#{git = "https://github.com/paritytech/polkadot-sdk.git", branch = "jv-doppelganger-node", features = ["node"] }
