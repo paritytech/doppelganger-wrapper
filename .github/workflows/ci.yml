@@ -54,7 +54,9 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y \
-            protobuf-compiler
+            protobuf-compiler \
+            libssl-dev make cmake \
+            ca-certificates jq
 
       - name: Clippy
         run: cargo clippy --all-targets --all-features
