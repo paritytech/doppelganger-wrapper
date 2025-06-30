@@ -50,6 +50,12 @@ jobs:
           shared-key: "tracker-cache"
           save-if: ${{ github.ref == 'refs/heads/main' }}
 
+      - name: Install_deps
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            protobuf-compiler
+
       - name: Clippy
         run: cargo clippy --all-targets --all-features
 
