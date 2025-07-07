@@ -18,6 +18,7 @@ jobs:
     needs: [preflight]
     name: build_release_for_linux
     runs-on: ubuntu-latest
+    timeout-minutes: 120
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
     steps:
