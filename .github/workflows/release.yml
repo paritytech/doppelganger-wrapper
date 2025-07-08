@@ -17,7 +17,7 @@ jobs:
   build_release_for_linux:
     needs: [preflight]
     name: build_release_for_linux
-    runs-on: ubuntu-latest
+    runs-on: parity-default
     timeout-minutes: 120
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
