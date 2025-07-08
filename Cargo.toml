@@ -1,0 +1,28 @@
+[package]
+name = "doppelganger-wrapper"
+version = "0.1.0"
+edition = "2024"
+
+[[bin]]
+name = "doppelganger"
+path = "src/doppelganger.rs"
+
+[[bin]]
+name = "doppelganger-parachain"
+path = "src/doppelganger_parachain.rs"
+
+[[bin]]
+name = "polkadot-execute-worker"
+path = "src/execute-worker.rs"
+
+[[bin]]
+name = "polkadot-prepare-worker"
+path = "src/prepare-worker.rs"
+
+[dependencies]
+polkadot-sdk = {git = "https://github.com/paritytech/polkadot-sdk.git", branch = "jv-doppelganger-node", features = ["node", "serde", "doppelganger"] }
+color-eyre = { version = "0.6.3", default-features = false }
+clap = { version = "4.5.13" }
+
+[build-dependencies]
+substrate-build-script-utils = { version = "11.0.0", default-features = true }
