@@ -47,3 +47,5 @@ jobs:
           files: |
             ./target/release/doppelganger
             ./target/release/doppelganger-parachain
+            ./target/release/polkadot-execute-worker
+            ./target/release/polkadot-prepare-worker
