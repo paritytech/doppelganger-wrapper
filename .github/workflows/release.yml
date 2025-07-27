@@ -5,7 +5,6 @@ on:
   push:
     tags:
       - 'v*'
-      - 'test-*'
 
 env:
   CARGO_TERM_COLOR: always
@@ -52,61 +51,61 @@ jobs:
             ./target/release/polkadot-execute-worker
             ./target/release/polkadot-prepare-worker
 
-  build_release_for_macos:
-    needs: [build_release_for_linux]
-    runs-on: parity-macos
-    timeout-minutes: 120
-    steps:
-      - name: checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+  # build_release_for_macos:
+  #   needs: [build_release_for_linux]
+  #   runs-on: parity-macos
+  #   timeout-minutes: 120
+  #   steps:
+  #     - name: checkout
+  #       uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0
 
-      - name: Set rust version from env file
-        run: |
-          RUST_VERSION=1.88.0
-          echo $RUST_VERSION
-          echo "RUST_VERSION=${RUST_VERSION}" >> $GITHUB_ENV
+  #     - name: Set rust version from env file
+  #       run: |
+  #         RUST_VERSION=1.88.0
+  #         echo $RUST_VERSION
+  #         echo "RUST_VERSION=${RUST_VERSION}" >> $GITHUB_ENV
 
-      - name: Set up Homebrew
-        uses: Homebrew/actions/setup-homebrew@1ccc07ccd54b6048295516a3eb89b192c35057dc # master from 12.09.2024
-      - name: Set homebrew binaries location on path
-        run: echo "/opt/homebrew/bin" >>  $GITHUB_PATH
+  #     - name: Set up Homebrew
+  #       uses: Homebrew/actions/setup-homebrew@1ccc07ccd54b6048295516a3eb89b192c35057dc # master from 12.09.2024
+  #     - name: Set homebrew binaries location on path
+  #       run: echo "/opt/homebrew/bin" >>  $GITHUB_PATH
 
-      - name: Install rust ${{ env.RUST_VERSION }}
-        uses: actions-rust-lang/setup-rust-toolchain@11df97af8e8102fd60b60a77dfbf58d40cd843b8 # v1.10.1
-        with:
-          cache: false
-          toolchain: ${{ env.RUST_VERSION }}
-          target: wasm32-unknown-unknown
-          components: cargo, clippy, rust-docs, rust-src, rustfmt, rustc, rust-std
+  #     - name: Install rust ${{ env.RUST_VERSION }}
+  #       uses: actions-rust-lang/setup-rust-toolchain@11df97af8e8102fd60b60a77dfbf58d40cd843b8 # v1.10.1
+  #       with:
+  #         cache: false
+  #         toolchain: ${{ env.RUST_VERSION }}
+  #         target: wasm32-unknown-unknown
+  #         components: cargo, clippy, rust-docs, rust-src, rustfmt, rustc, rust-std
 
-      - name: cargo info
-        run: |
-          echo "######## rustup show ########"
-          rustup show
-          echo "######## cargo --version ########"
-          cargo --version
+  #     - name: cargo info
+  #       run: |
+  #         echo "######## rustup show ########"
+  #         rustup show
+  #         echo "######## cargo --version ########"
+  #         cargo --version
 
-      - name: Install protobuf
-        run: brew install protobuf
+  #     - name: Install protobuf
+  #       run: brew install protobuf
 
-      - name: Build release
-        run: |
-          git config --global --add safe.directory "${GITHUB_WORKSPACE}" #avoid "detected dubious ownership" error
-          SKIP_WASM_BUILD=1 cargo build --release
-          for bin in doppelganger doppelganger-parachain polkadot-execute-worker polkadot-prepare-worker; do
-            mv ./target/release/$bin ./target/release/$bin-macos-arm64
-          done;
+  #     - name: Build release
+  #       run: |
+  #         git config --global --add safe.directory "${GITHUB_WORKSPACE}" #avoid "detected dubious ownership" error
+  #         SKIP_WASM_BUILD=1 cargo build --release
+  #         for bin in doppelganger doppelganger-parachain polkadot-execute-worker polkadot-prepare-worker; do
+  #           mv ./target/release/$bin ./target/release/$bin-macos-arm64
+  #         done;
 
-      - name: release
-        uses: "marvinpinto/action-automatic-releases@latest"
-        id: create_release
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: false
-          files: |
-            ./target/release/doppelganger-macos-arm64
-            ./target/release/doppelganger-parachain-macos-arm64
-            ./target/release/polkadot-execute-worker-macos-arm64
-            ./target/release/polkadot-prepare-worker-macos-arm64
+  #     - name: release
+  #       uses: "marvinpinto/action-automatic-releases@latest"
+  #       id: create_release
+  #       with:
+  #         repo_token: "${{ secrets.GITHUB_TOKEN }}"
+  #         prerelease: false
+  #         files: |
+  #           ./target/release/doppelganger-macos-arm64
+  #           ./target/release/doppelganger-parachain-macos-arm64
+  #           ./target/release/polkadot-execute-worker-macos-arm64
+  #           ./target/release/polkadot-prepare-worker-macos-arm64
