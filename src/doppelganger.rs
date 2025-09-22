@@ -1,5 +1,5 @@
 use color_eyre::eyre;
-use polkadot_sdk::polkadot_cli::{Cli, run,  run_doppelganger};
+use polkadot_sdk::polkadot_cli::{Cli, run, run_doppelganger};
 use polkadot_sdk::sc_cli::clap::Parser;
 use std::path::PathBuf;
 
