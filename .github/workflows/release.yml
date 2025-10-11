@@ -79,6 +79,13 @@ jobs:
       - name: Generate checksums
         run: |
           cd artifacts
+          # move files to artifacts
+          mv doppelganger-macos-latest-aarch64-apple-darwin-${{ github.ref_name }}/* .
+          rmdir doppelganger-macos-latest-aarch64-apple-darwin-${{ github.ref_name }}
+
+          mv doppelganger-ubuntu-latest-x86_64-unknown-linux-gnu-${{ github.ref_name }}/* .
+          rmdir doppelganger-ubuntu-latest-x86_64-unknown-linux-gnu-${{ github.ref_name }}
+
           sha256sum * > checksums.txt
 
       - name: Create Release
