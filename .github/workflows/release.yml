@@ -14,12 +14,14 @@ jobs:
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             bin-suffix: "" # empty for linux x86_64
+            container: '{"image": "docker.io/paritytech/ci-unified:bullseye-1.88.0-2025-06-27-v202506301118"}'
           - os: macos-latest
             target: aarch64-apple-darwin
             bin-suffix: "-macos-arm64"
-
+            container: '{"image": null}'
 
     runs-on: ${{ matrix.os }}
+    container: ${{ fromJSON(matrix.container) }}
 
     steps:
       - name: Checkout repository
@@ -92,9 +94,8 @@ jobs:
         uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2.3.3
         with:
           files: |
-            artifacts/**/*
-            artifacts/checksums.txt
-          generate_release_notes: true
+            artifacts/*
+          generate_release_notes: false
           draft: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
