@@ -11,7 +11,7 @@ Wrapper to easily build `doppelganger` and `doppelganger-parachain` nodes.
 
 You can read the origina _inseption_ and design [here](https://github.com/paritytech/polkadot-sdk/issues/4230).
 As brief introduction, the idea is to fork _live networks_ by creating a node that  _override_ the needed keys to
-spawn a new network and continue with the block production (and keep the whole state). For that purpouse this node implement
+spawn a new network and continue with the block production (and keep the whole state). For that purpouse this node implements
 a custom _block-import_ on top of babe/aura.
 
 ## Build
