@@ -20,7 +20,7 @@ name = "polkadot-prepare-worker"
 path = "src/prepare-worker.rs"
 
 [dependencies]
-polkadot-sdk = {git = "https://github.com/paritytech/polkadot-sdk.git", features = ["node", "serde", "doppelganger"], rev = "185ad32" } # branch: jv-doppelganger-node
+polkadot-sdk = {git = "https://github.com/paritytech/polkadot-sdk.git", features = ["node", "serde", "doppelganger"], rev = "1ea13fd" } # branch: jv-doppelganger-node-to-header
 #polkadot-sdk = { path = "/Users/parity/polkadot-sdk/umbrella", features = ["node", "serde", "doppelganger"] } # branch: jv-doppelganger-node
 color-eyre = { version = "0.6.3", default-features = false }
 clap = { version = "4.5.13" }
