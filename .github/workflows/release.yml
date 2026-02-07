@@ -55,7 +55,12 @@ jobs:
       - name: Install deps MacOs
         if: ${{ matrix.os == 'macos-latest' }}
         run: |
-          brew install protobuf
+          brew install protobuf llvm
+	  export LIBCLANG_PATH="$(brew --prefix llvm)/lib"
+	  export LD_LIBRARY_PATH="$LIBCLANG_PATH:$LD_LIBRARY_PATH"
+	  export DYLD_LIBRARY_PATH="$LIBCLANG_PATH:$DYLD_LIBRARY_PATH"
+	  export PATH="$(brew --prefix llvm)/bin:$PATH"
+	  ls "$(brew --prefix llvm)/lib/libclang.dylib"
 
       - name: Build
         run: SKIP_WASM_BUILD=1 cargo build --release --target ${{ matrix.target }}
