@@ -62,8 +62,21 @@ jobs:
           export PATH="$(brew --prefix llvm)/bin:$PATH"
           ls "$(brew --prefix llvm)/lib/libclang.dylib"
 
-      - name: Build
-        run: SKIP_WASM_BUILD=1 cargo build --release --target ${{ matrix.target }}
+      - name: Build MacOS
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: |
+          export LIBCLANG_PATH="$(brew --prefix llvm)/lib"
+          export LD_LIBRARY_PATH="$LIBCLANG_PATH:$LD_LIBRARY_PATH"
+          export DYLD_LIBRARY_PATH="$LIBCLANG_PATH:$DYLD_LIBRARY_PATH"
+          export PATH="$(brew --prefix llvm)/bin:$PATH"
+          ls "$(brew --prefix llvm)/lib/libclang.dylib"
+
+          SKIP_WASM_BUILD=1 cargo build --release --target ${{ matrix.target }}
+
+      - name: Build Linux
+        if: ${{ matrix.os != 'macos-latest' }}
+        run: |
+          SKIP_WASM_BUILD=1 cargo build --release --target ${{ matrix.target }}
 
       - name: Package binary
         run: |
