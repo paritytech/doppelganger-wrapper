@@ -4997,7 +4997,7 @@ dependencies = [
 
 [[package]]
 name = "doppelganger-wrapper"
-version = "0.1.7"
+version = "0.2.0"
 dependencies = [
  "clap",
  "color-eyre",
