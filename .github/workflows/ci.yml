@@ -24,7 +24,7 @@ jobs:
     runs-on: parity-default
     timeout-minutes: 120
     container:
-      image: docker.io/paritytech/ci-unified:bullseye-1.88.0-2025-06-27-v202506301118
+      image: docker.io/paritytech/ci-unified:bullseye-1.93.0-2026-01-27-v202605151311
 
     steps:
       - name: Checkout

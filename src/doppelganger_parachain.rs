@@ -3,8 +3,8 @@
 
 //! Doppelganger parachain node.
 
-use polkadot_sdk::doppelganger_lib::chain_spec::{ChainSpecLoader, RuntimeResolver};
-use polkadot_sdk::polkadot_omni_node_lib::{CliConfig as CliConfigT, RunConfig, run};
+use polkadot_sdk::doppelganger_lib::chain_spec::ChainSpecLoader;
+use polkadot_sdk::polkadot_omni_node_lib::{CliConfig as CliConfigT, RunConfig, run, runtime::DefaultRuntimeResolver};
 
 struct CliConfig;
 
@@ -31,7 +31,7 @@ fn main() -> color_eyre::eyre::Result<()> {
 
     let config = RunConfig {
         chain_spec_loader: Box::new(ChainSpecLoader),
-        runtime_resolver: Box::new(RuntimeResolver),
+        runtime_resolver: Box::new(DefaultRuntimeResolver),
     };
     Ok(run::<CliConfig>(config)?)
 }
