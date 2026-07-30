@@ -1,6 +1,6 @@
 [package]
 name = "doppelganger-wrapper"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2024"
 
 [[bin]]
@@ -20,7 +20,7 @@ name = "polkadot-prepare-worker"
 path = "src/prepare-worker.rs"
 
 [dependencies]
-polkadot-sdk = {git = "https://github.com/paritytech/polkadot-sdk.git", features = ["node", "serde", "doppelganger"], rev = "7b28a81" } # branch: doppelganger-bite
+polkadot-sdk = {git = "https://github.com/paritytech/polkadot-sdk.git", features = ["node", "serde", "doppelganger"], rev = "e01ff2c0aaf" } # branch: doppelganger-bite
 #polkadot-sdk = { path = "/Users//parity/polkadot-sdk/umbrella", features = ["node", "serde", "doppelganger"] }
 color-eyre = { version = "0.6.3", default-features = false }
 clap = { version = "4.5.13" }
