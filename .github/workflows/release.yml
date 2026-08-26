@@ -56,15 +56,8 @@ jobs:
         if: ${{ matrix.os == 'parity-macos' }}
         run: brew install protobuf llvm
 
-      # No DYLD_LIBRARY_PATH. It applies to every process the shell starts, rustc included,
-      # and rustc carries its own LLVM — now the same version as Homebrew's (22.1.8), so the
-      # loader substitutes brew's libLLVM.dylib for rustc's and rustc segfaults the moment it
-      # touches LLVM. v0.2.2 failed twice that way, during cargo's toolchain probe rather than
-      # while compiling anything here. It only began when brew's LLVM reached the same
-      # version, which is why it looked like a flake.
-      #
-      # bindgen finds libclang through LIBCLANG_PATH by itself, so nothing here needs it.
-      # (LD_LIBRARY_PATH did nothing on macOS either way.)
+      # No DYLD_LIBRARY_PATH: it applies to rustc too, and brew's libLLVM (22.1.8) now
+      # shadows rustc's own, segfaulting it. bindgen only needs LIBCLANG_PATH.
       - name: Build MacOS
         if: ${{ matrix.os == 'parity-macos' }}
         run: |
