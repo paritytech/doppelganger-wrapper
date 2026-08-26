@@ -39,7 +39,7 @@ jobs:
           save-if: ${{ github.ref == 'refs/heads/main' }}
 
       - name: Install Rust
-        if: ${{ matrix.os == 'macos-latest' }}
+        if: ${{ matrix.os == 'parity-macos' }}
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.target }}
@@ -53,7 +53,7 @@ jobs:
       #     clang libclang-dev
 
       - name: Install deps MacOs
-        if: ${{ matrix.os == 'macos-latest' }}
+        if: ${{ matrix.os == 'parity-macos' }}
         run: |
           brew install protobuf llvm
           export LIBCLANG_PATH="$(brew --prefix llvm)/lib"
@@ -63,7 +63,7 @@ jobs:
           ls "$(brew --prefix llvm)/lib/libclang.dylib"
 
       - name: Build MacOS
-        if: ${{ matrix.os == 'macos-latest' }}
+        if: ${{ matrix.os == 'parity-macos' }}
         run: |
           export LIBCLANG_PATH="$(brew --prefix llvm)/lib"
           export LD_LIBRARY_PATH="$LIBCLANG_PATH:$LD_LIBRARY_PATH"
@@ -74,7 +74,7 @@ jobs:
           SKIP_WASM_BUILD=1 cargo build --release --target ${{ matrix.target }}
 
       - name: Build Linux
-        if: ${{ matrix.os != 'macos-latest' }}
+        if: ${{ matrix.os != 'parity-macos' }}
         run: |
           SKIP_WASM_BUILD=1 cargo build --release --target ${{ matrix.target }}
 
