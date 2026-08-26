@@ -43,3 +43,61 @@ jobs:
 
       - name: Tests
         run: cargo test
+
+  # macOS is built by the release workflow and nowhere else, so a tag has been the first
+  # time this path runs — twice now a release has failed on something unrelated to the
+  # change being released. Same runner, same steps, same flags as release.yml: if a tag
+  # would fail here, it fails on the pull request instead.
+  macos:
+    name: CI (macOS)
+    runs-on: parity-macos
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch cache
+        uses: Swatinem/rust-cache@f0deed1e0edfc6a9be95417288c0e1099b1eeec3 # v2.7.7
+        with:
+          shared-key: "wrapper-cache-macos"
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin
+
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@1ccc07ccd54b6048295516a3eb89b192c35057dc # master from 12.09.2024
+
+      - name: Set homebrew binaries location on path
+        run: echo "/opt/homebrew/bin" >> $GITHUB_PATH
+
+      - name: Install deps
+        run: brew install protobuf llvm
+
+      # The release build has twice died here with rustc segfaulting inside
+      # `rustc_llvm::initialize_available_targets` — during cargo's *toolchain probe*, before
+      # any of this crate is compiled. These are the versions that would explain it: rustc
+      # carries its own LLVM, and the build below puts Homebrew's on DYLD_LIBRARY_PATH.
+      - name: Toolchain and LLVM versions
+        run: |
+          rustc --version --verbose
+          cargo --version
+          echo "brew llvm: $(brew --prefix llvm)"
+          "$(brew --prefix llvm)/bin/llvm-config" --version
+          echo "--- does rustc survive its own probe with brew LLVM on DYLD_LIBRARY_PATH? ---"
+          DYLD_LIBRARY_PATH="$(brew --prefix llvm)/lib" \
+            rustc - --crate-name ___ --print=sysroot --print=cfg </dev/null >/dev/null \
+            && echo "probe ok" || echo "probe FAILED (rc=$?)"
+
+      - name: Build
+        run: |
+          export LIBCLANG_PATH="$(brew --prefix llvm)/lib"
+          export LD_LIBRARY_PATH="$LIBCLANG_PATH:$LD_LIBRARY_PATH"
+          export DYLD_LIBRARY_PATH="$LIBCLANG_PATH:$DYLD_LIBRARY_PATH"
+          export PATH="$(brew --prefix llvm)/bin:$PATH"
+          ls "$(brew --prefix llvm)/lib/libclang.dylib"
+
+          SKIP_WASM_BUILD=1 cargo build --release --target aarch64-apple-darwin
