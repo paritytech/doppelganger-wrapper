@@ -44,13 +44,13 @@ jobs:
         with:
           targets: ${{ matrix.target }}
 
-      # - name: Install deps linux
-      #   if: ${{ matrix.os == 'ubuntu-latest' }}
-      #   run: |
-      #     sudo apt-get update && \
-      #     sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
-      #     protobuf-compiler \
-      #     clang libclang-dev
+      - name: Set up Homebrew (MacOs)
+        if: ${{ matrix.os == 'parity-macos' }}
+         uses: Homebrew/actions/setup-homebrew@1ccc07ccd54b6048295516a3eb89b192c35057dc # master from 12.09.2024
+
+      - name: Set homebrew binaries location on path (MacOs)
+        if: ${{ matrix.os == 'parity-macos' }}
+        run: echo "/opt/homebrew/bin" >>  $GITHUB_PATH
 
       - name: Install deps MacOs
         if: ${{ matrix.os == 'parity-macos' }}
