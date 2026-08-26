@@ -98,13 +98,15 @@ jobs:
       - name: Generate checksums
         run: |
           cd artifacts
-          # move files to artifacts
-          mv doppelganger-macos-latest-aarch64-apple-darwin-${{ github.ref_name }}/* .
-          rmdir doppelganger-macos-latest-aarch64-apple-darwin-${{ github.ref_name }}
-
-          mv doppelganger-parity-default-x86_64-unknown-linux-gnu-${{ github.ref_name }}/* .
-          rmdir doppelganger-parity-default-x86_64-unknown-linux-gnu-${{ github.ref_name }}
-
+          # Flatten whatever the matrix uploaded. The directory names carry the runner label
+          # (`doppelganger-<os>-<target>-<tag>`), so naming them here breaks the moment a
+          # runner is renamed — which is how v0.2.3 built both binaries and then published
+          # neither.
+          for d in */; do
+            mv "$d"* .
+            rmdir "$d"
+          done
+          ls -l
           sha256sum * > checksums.txt
 
       - name: Create Release
