@@ -77,20 +77,10 @@ jobs:
       - name: Install deps
         run: brew install protobuf llvm
 
-      # The release build has twice died here with rustc segfaulting inside
-      # `rustc_llvm::initialize_available_targets` — during cargo's *toolchain probe*, before
-      # any of this crate is compiled. These are the versions that would explain it: rustc
-      # carries its own LLVM, and the build below puts Homebrew's on DYLD_LIBRARY_PATH.
       - name: Toolchain and LLVM versions
         run: |
           rustc --version --verbose
-          cargo --version
-          echo "brew llvm: $(brew --prefix llvm)"
-          "$(brew --prefix llvm)/bin/llvm-config" --version
-          echo "--- does rustc survive its own probe with brew LLVM on DYLD_LIBRARY_PATH? ---"
-          DYLD_LIBRARY_PATH="$(brew --prefix llvm)/lib" \
-            rustc - --crate-name ___ --print=sysroot --print=cfg </dev/null >/dev/null \
-            && echo "probe ok" || echo "probe FAILED (rc=$?)"
+          echo "brew llvm: $("$(brew --prefix llvm)/bin/llvm-config" --version)"
 
       # No DYLD_LIBRARY_PATH: it applies to rustc too, and brew's libLLVM (22.1.8) now
       # shadows rustc's own, segfaulting it. bindgen only needs LIBCLANG_PATH.
