@@ -54,22 +54,15 @@ jobs:
 
       - name: Install deps MacOs
         if: ${{ matrix.os == 'parity-macos' }}
-        run: |
-          brew install protobuf llvm
-          export LIBCLANG_PATH="$(brew --prefix llvm)/lib"
-          export LD_LIBRARY_PATH="$LIBCLANG_PATH:$LD_LIBRARY_PATH"
-          export DYLD_LIBRARY_PATH="$LIBCLANG_PATH:$DYLD_LIBRARY_PATH"
-          export PATH="$(brew --prefix llvm)/bin:$PATH"
-          ls "$(brew --prefix llvm)/lib/libclang.dylib"
+        run: brew install protobuf llvm
 
+      # No DYLD_LIBRARY_PATH: it applies to rustc too, and brew's libLLVM (22.1.8) now
+      # shadows rustc's own, segfaulting it. bindgen only needs LIBCLANG_PATH.
       - name: Build MacOS
         if: ${{ matrix.os == 'parity-macos' }}
         run: |
           export LIBCLANG_PATH="$(brew --prefix llvm)/lib"
-          export LD_LIBRARY_PATH="$LIBCLANG_PATH:$LD_LIBRARY_PATH"
-          export DYLD_LIBRARY_PATH="$LIBCLANG_PATH:$DYLD_LIBRARY_PATH"
-          export PATH="$(brew --prefix llvm)/bin:$PATH"
-          ls "$(brew --prefix llvm)/lib/libclang.dylib"
+          ls "$LIBCLANG_PATH/libclang.dylib"
 
           SKIP_WASM_BUILD=1 cargo build --release --target ${{ matrix.target }}
 
