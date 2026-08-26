@@ -46,7 +46,7 @@ jobs:
 
       - name: Set up Homebrew (MacOs)
         if: ${{ matrix.os == 'parity-macos' }}
-         uses: Homebrew/actions/setup-homebrew@1ccc07ccd54b6048295516a3eb89b192c35057dc # master from 12.09.2024
+        uses: Homebrew/actions/setup-homebrew@1ccc07ccd54b6048295516a3eb89b192c35057dc # master from 12.09.2024
 
       - name: Set homebrew binaries location on path (MacOs)
         if: ${{ matrix.os == 'parity-macos' }}
