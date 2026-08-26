@@ -15,7 +15,7 @@ jobs:
             target: x86_64-unknown-linux-gnu
             bin-suffix: "" # empty for linux x86_64
             container: '{"image": "docker.io/paritytech/ci-unified:bullseye-1.93.0-2026-01-27-v202605151311"}'
-          - os: macos-latest
+          - os: parity-macos
             target: aarch64-apple-darwin
             bin-suffix: "-macos-arm64"
             container: '{"image": null}'
