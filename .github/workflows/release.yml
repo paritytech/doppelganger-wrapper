@@ -82,7 +82,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: doppelganger-${{ matrix.os }}-${{ matrix.target }}-${{ github.ref_name }}
+          name: doppelganger-${{ matrix.target }}-${{ github.ref_name }}
           path: dist/*
 
   release:
@@ -98,10 +98,8 @@ jobs:
       - name: Generate checksums
         run: |
           cd artifacts
-          # Flatten whatever the matrix uploaded. The directory names carry the runner label
-          # (`doppelganger-<os>-<target>-<tag>`), so naming them here breaks the moment a
-          # runner is renamed — which is how v0.2.3 built both binaries and then published
-          # neither.
+          # Flatten whatever the matrix uploaded, rather than naming the directories here:
+          # v0.2.3 built both binaries and published neither, because a runner got renamed.
           for d in */; do
             mv "$d"* .
             rmdir "$d"
